@@ -2,9 +2,9 @@ spring:
   application:
     name: subscription-api
   datasource:
-    url: jdbc:mysql://localhost:3307/subscription_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Europe/Stockholm
+    url: jdbc:mysql://localhost:3306/subscription_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Europe/Stockholm
     username: root
-    password: root
+    password: root1234&
     hikari:
       pool-name: HikariJpaPool
       maximum-pool-size: 10
@@ -40,4 +40,4 @@ app:
     expiration-ms: 86400000
   security:
     token-blacklist:
-      enabled: true
+      enabled: false
