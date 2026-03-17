@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import se.lexicon.subscriptionapi.domain.constant.ServiceType;
 import se.lexicon.subscriptionapi.dto.request.PlanRequest;
 import se.lexicon.subscriptionapi.dto.response.PlanResponse;
 import se.lexicon.subscriptionapi.service.PlanService;
@@ -62,12 +63,32 @@ public class PlanController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping("/active")
     @Operation(summary = "View all active plans")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<PlanResponse>> viewAllActivePlans() {
 
         List<PlanResponse> plans = planService.findByStatus();
+
+        return ResponseEntity.ok(plans);
+    }
+
+    @GetMapping("/service-type/{serviceType}")
+    @Operation(summary = "View all active plans by service type")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<PlanResponse>> viewAllActivePlansByServiceType(@PathVariable ServiceType serviceType) {
+
+        List<PlanResponse> plans = planService.viewActivePlansByServiceType(serviceType);
+
+        return ResponseEntity.ok(plans);
+    }
+
+    @GetMapping("/operator/{operatorId}")
+    @Operation(summary = "View all active plans by Operator Id")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<PlanResponse>> viewAllActivePlansByOperatorId(@PathVariable Long operatorId) {
+
+        List<PlanResponse> plans = planService.viewActivePlansByOperatorId(operatorId);
 
         return ResponseEntity.ok(plans);
     }

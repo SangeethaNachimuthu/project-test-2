@@ -3,6 +3,7 @@ package se.lexicon.subscriptionapi.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.lexicon.subscriptionapi.domain.constant.PlanStatus;
+import se.lexicon.subscriptionapi.domain.constant.ServiceType;
 import se.lexicon.subscriptionapi.domain.entity.Operator;
 import se.lexicon.subscriptionapi.domain.entity.Plan;
 import se.lexicon.subscriptionapi.dto.request.PlanRequest;
@@ -14,7 +15,6 @@ import se.lexicon.subscriptionapi.repository.OperatorRepository;
 import se.lexicon.subscriptionapi.repository.PlanRepository;
 import se.lexicon.subscriptionapi.service.PlanService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +43,7 @@ public class PlanServiceImpl implements PlanService {
 
         Plan plan = mapper.toEntity(request);
         plan.setOperator(operator);
-        plan.setStatus(PlanStatus.ACTIVE);
+        plan.setStatus(request.status());
 
         Plan savedPlan = planRepository.save(plan);
 
@@ -77,6 +77,7 @@ public class PlanServiceImpl implements PlanService {
         plan.setName(request.name());
         plan.setPrice(request.price());
         plan.setServiceType(request.serviceType());
+        plan.setStatus(request.status());
         plan.setDataLimit(request.dataLimit());
         plan.setOperator(operator);
 
@@ -98,12 +99,43 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PlanResponse> findByStatus() {
 
         return planRepository.findByStatus(PlanStatus.ACTIVE)
                 .stream()
                 .map(mapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PlanResponse> viewActivePlansByServiceType(ServiceType serviceType) {
+
+        if (serviceType == null) {
+            throw new IllegalArgumentException("ServiceType cannot be null");
+        }
+        return planRepository.findByStatusAndServiceType(PlanStatus.ACTIVE, serviceType)
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PlanResponse> viewActivePlansByOperatorId(Long operatorId) {
+
+        if(operatorId == null) {
+            throw new IllegalArgumentException("Operator id cannot be null");
+        }
+
+        operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Operator not found with Id: " + operatorId));
+
+        return planRepository.findByStatusAndOperatorId(PlanStatus.ACTIVE, operatorId)
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 
 
