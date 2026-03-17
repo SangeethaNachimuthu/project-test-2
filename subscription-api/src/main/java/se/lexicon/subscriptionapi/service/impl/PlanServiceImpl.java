@@ -96,4 +96,15 @@ public class PlanServiceImpl implements PlanService {
 
         planRepository.delete(plan);
     }
+
+    @Override
+    public List<PlanResponse> findByStatus() {
+
+        return planRepository.findByStatus(PlanStatus.ACTIVE)
+                .stream()
+                .map(mapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+
 }

@@ -11,5 +11,5 @@ public interface PlanService {
     List<PlanResponse> viewAll();
     PlanResponse updatePlan(Long id, PlanRequest request);
     void deletePlan(Long id);
-
+    List<PlanResponse> findByStatus();
 }
