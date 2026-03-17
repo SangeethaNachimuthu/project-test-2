@@ -8,4 +8,5 @@ import se.lexicon.subscriptionapi.domain.entity.Plan;
 @Repository
 @Validated
 public interface PlanRepository extends JpaRepository<Plan, Long> {
+    boolean existsByNameIgnoreCase(String name);
 }
