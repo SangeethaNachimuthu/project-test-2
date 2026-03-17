@@ -10,6 +10,6 @@ public interface PlanService {
     PlanResponse create(PlanRequest request);
     List<PlanResponse> viewAll();
     PlanResponse updatePlan(Long id, PlanRequest request);
-    PlanResponse deletePlan(Long id);
+    void deletePlan(Long id);
 
 }

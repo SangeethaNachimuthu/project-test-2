@@ -40,4 +40,20 @@ public class PlanController {
         List<PlanResponse> plans = planService.viewAll();
         return ResponseEntity.ok(plans);
     }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Update a Plan")
+    public ResponseEntity<PlanResponse> updatePlan(@Valid @PathVariable Long id, @RequestBody PlanRequest request) {
+
+        PlanResponse response = planService.updatePlan(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a Plan")
+    public ResponseEntity<Void> deletePlan(@PathVariable Long id) {
+
+        planService.deletePlan(id);
+        return ResponseEntity.noContent().build();
+    }
 }

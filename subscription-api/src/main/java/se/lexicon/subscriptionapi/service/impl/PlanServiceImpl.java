@@ -61,12 +61,39 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
+    @Transactional
     public PlanResponse updatePlan(Long id, PlanRequest request) {
-        return null;
+
+        if (id == null || request == null) {
+            throw new IllegalArgumentException("Id or PlanRequest cannot be null");
+        }
+
+        Plan plan = planRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Plan not found with id: " + id));
+
+        Operator operator = operatorRepository.findById(request.operatorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Operator not found with Id: " + request.operatorId()));
+
+        plan.setName(request.name());
+        plan.setPrice(request.price());
+        plan.setServiceType(request.serviceType());
+        plan.setDataLimit(request.dataLimit());
+        plan.setOperator(operator);
+
+        Plan updatedPlan = planRepository.save(plan);
+        return mapper.toResponse(updatedPlan);
     }
 
     @Override
-    public PlanResponse deletePlan(Long id) {
-        return null;
+    @Transactional
+    public void deletePlan(Long id) {
+
+        if(id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
+        Plan plan = planRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Plan not found with id: " + id));
+
+        planRepository.delete(plan);
     }
 }
