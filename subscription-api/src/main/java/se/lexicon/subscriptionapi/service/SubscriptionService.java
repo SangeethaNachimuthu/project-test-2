@@ -8,7 +8,7 @@ import java.util.List;
 public interface SubscriptionService {
 
     SubscriptionResponse create(SubscriptionRequest request);
-    List<SubscriptionResponse> viewSubscription(Long customerId);
+    List<SubscriptionResponse> viewSubscriptionByCustomer(String email);
     SubscriptionResponse updateSubscription(Long customerId, SubscriptionRequest request);
     void cancelSubscription(Long id);
 }

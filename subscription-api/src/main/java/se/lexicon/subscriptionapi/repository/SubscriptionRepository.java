@@ -6,11 +6,15 @@ import se.lexicon.subscriptionapi.domain.constant.ServiceType;
 import se.lexicon.subscriptionapi.domain.constant.SubscriptionStatus;
 import se.lexicon.subscriptionapi.domain.entity.Subscription;
 
+import java.util.List;
+
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 
     boolean existsByCustomerIdAndPlanServiceTypeAndStatus(Long customerId,
                                                           ServiceType type,
                                                           SubscriptionStatus status);
+
+    List<Subscription> findByCustomerId(Long customerId);
 
 }

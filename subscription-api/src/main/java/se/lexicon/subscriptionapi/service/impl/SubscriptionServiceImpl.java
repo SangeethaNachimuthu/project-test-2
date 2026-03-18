@@ -77,17 +77,19 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public List<SubscriptionResponse> viewSubscription(Long customerId) {
+    public List<SubscriptionResponse> viewSubscriptionByCustomer(String email) {
 
-        if(customerId == null) {
-            throw new IllegalArgumentException("Customer Id cannot be null");
+        if (email == null) {
+            throw new IllegalArgumentException("Email cannot be null");
         }
 
-        customerRepository.findById(customerId)
-                .orElseThrow(()-> new ResourceNotFoundException("Customer not found with ID: " + customerId));
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
-
-        return List.of();
+        return subscriptionRepository.findByCustomerId(customer.getId())
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 
     @Override
