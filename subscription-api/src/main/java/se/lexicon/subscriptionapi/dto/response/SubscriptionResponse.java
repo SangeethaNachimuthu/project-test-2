@@ -8,7 +8,7 @@ public record SubscriptionResponse(
 
         Long id,
         Long customerId,
-        Long planId,
+        PlanResponse plan,
         LocalDateTime subscribedDate,
         SubscriptionStatus status,
         LocalDateTime cancelledDate

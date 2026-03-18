@@ -16,7 +16,8 @@ public record PlanResponse(
         PlanStatus status,
         String dataLimit,
         LocalDateTime createdAt,
-        String operatorName,
-        Long operatorId
+        /*String operatorName,
+        Long operatorId,*/
+        OperatorResponse operator
 ) {
 }
