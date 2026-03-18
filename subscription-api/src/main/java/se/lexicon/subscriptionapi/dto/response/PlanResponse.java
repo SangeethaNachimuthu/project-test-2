@@ -16,6 +16,7 @@ public record PlanResponse(
         PlanStatus status,
         String dataLimit,
         LocalDateTime createdAt,
-        Operator operator
+        String operatorName,
+        Long operatorId
 ) {
 }

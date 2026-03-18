@@ -2,6 +2,7 @@ package se.lexicon.subscriptionapi.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.validation.annotation.Validated;
 import se.lexicon.subscriptionapi.domain.entity.Plan;
 import se.lexicon.subscriptionapi.dto.request.PlanRequest;
@@ -15,4 +16,10 @@ public interface PlanMapper {
     Plan toEntity(PlanRequest request);
 
     PlanResponse toResponse(Plan plan);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "operator", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    void updateEntity(PlanRequest request, @org.mapstruct.MappingTarget Plan plan);
 }

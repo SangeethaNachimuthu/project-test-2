@@ -74,11 +74,13 @@ public class PlanServiceImpl implements PlanService {
         Operator operator = operatorRepository.findById(request.operatorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Operator not found with Id: " + request.operatorId()));
 
-        plan.setName(request.name());
+        /*plan.setName(request.name());
         plan.setPrice(request.price());
         plan.setServiceType(request.serviceType());
         plan.setStatus(request.status());
         plan.setDataLimit(request.dataLimit());
+        plan.setOperator(operator);*/
+        mapper.updateEntity(request, plan);
         plan.setOperator(operator);
 
         Plan updatedPlan = planRepository.save(plan);
