@@ -77,6 +77,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SubscriptionResponse> viewSubscriptionByCustomer(String email) {
 
         if (email == null) {
@@ -93,12 +94,49 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionResponse updateSubscription(Long customerId, SubscriptionRequest request) {
-        return null;
+    @Transactional
+    public SubscriptionResponse updateSubscription(Long id, SubscriptionRequest request) {
+
+        if(id == null || request == null) {
+            throw new IllegalArgumentException("ID or SubscriptionRequest cannot be null");
+        }
+
+        Subscription subscription = subscriptionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Subscription not found with ID: " + id));
+
+        Plan plan = planRepository.findById(request.planId())
+                .orElseThrow(()-> new ResourceNotFoundException("Plan not found with ID: " + request.planId()));
+
+        // Validate plan change rules
+        if (subscription.getPlan().getServiceType() != plan.getServiceType() ||
+                !subscription.getPlan().getOperator().getId().equals(plan.getOperator().getId())) {
+            throw new IllegalArgumentException("Plan change must be within the same service type and operator");
+        }
+
+        if (plan.getStatus() == PlanStatus.INACTIVE) {
+            throw new IllegalArgumentException("Cannot change to an inactive plan");
+        }
+
+        mapper.updateEntity(request, subscription);
+        subscription.setPlan(plan);
+        Subscription updatedSubscription = subscriptionRepository.save(subscription);
+
+        return mapper.toResponse(updatedSubscription);
     }
 
     @Override
+    @Transactional
     public void cancelSubscription(Long id) {
 
+        if(id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
+
+        Subscription subscription = subscriptionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Subscription not found with Id: " + id));
+
+        subscription.cancel();
+
+        subscriptionRepository.save(subscription);
     }
 }

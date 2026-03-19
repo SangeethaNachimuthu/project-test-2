@@ -9,6 +9,6 @@ public interface SubscriptionService {
 
     SubscriptionResponse create(SubscriptionRequest request);
     List<SubscriptionResponse> viewSubscriptionByCustomer(String email);
-    SubscriptionResponse updateSubscription(Long customerId, SubscriptionRequest request);
+    SubscriptionResponse updateSubscription(Long id, SubscriptionRequest request);
     void cancelSubscription(Long id);
 }

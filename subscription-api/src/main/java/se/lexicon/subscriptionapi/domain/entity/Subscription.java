@@ -41,7 +41,7 @@ public class Subscription {
         subscribedDate = LocalDateTime.now();
     }
 
-    public void setCancelledDate() {
+    public void cancel() {
 
         this.status = SubscriptionStatus.CANCELLED;
         this.cancelledDate = LocalDateTime.now();

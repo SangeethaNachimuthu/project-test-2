@@ -23,8 +23,6 @@ public interface PlanMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "operator", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    //@Mapping(target = "updatedAt", ignore = true)
     void updateEntity(PlanRequest request, @org.mapstruct.MappingTarget Plan plan);
 
-    OperatorResponse toOperatorResponse(Operator operator);
 }

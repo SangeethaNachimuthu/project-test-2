@@ -2,6 +2,8 @@ package se.lexicon.subscriptionapi.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.springframework.boot.data.metrics.DefaultRepositoryTagsProvider;
 import se.lexicon.subscriptionapi.domain.entity.Operator;
 import se.lexicon.subscriptionapi.domain.entity.Plan;
 import se.lexicon.subscriptionapi.domain.entity.Subscription;
@@ -22,6 +24,8 @@ public interface SubscriptionMapper {
     @Mapping(source = "plan", target = "plan")
     SubscriptionResponse toResponse(Subscription subscription);
 
-    PlanResponse toPlanResponse(Plan plan);
-
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "customer", ignore = true)
+    @Mapping(target = "subscribedDate", ignore = true)
+    void updateEntity(SubscriptionRequest request, @MappingTarget Subscription subscription);
 }
