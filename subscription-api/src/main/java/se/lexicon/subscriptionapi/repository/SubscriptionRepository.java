@@ -18,5 +18,4 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     List<Subscription> findByCustomerId(Long customerId);
 
-    Plan findByPlan_Id(Long planId);
 }
