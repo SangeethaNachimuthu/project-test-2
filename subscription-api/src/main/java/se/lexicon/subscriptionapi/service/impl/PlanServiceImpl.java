@@ -35,6 +35,10 @@ public class PlanServiceImpl implements PlanService {
     @Transactional
     public PlanResponse create(PlanRequest request) {
 
+        if(request == null) {
+            throw new IllegalArgumentException("PlanRequest cannot be null");
+        }
+
         if (planRepository.existsByNameIgnoreCase(request.name())) {
             throw new BusinessRuleException("Plan name already exists: " + request.name());
         }

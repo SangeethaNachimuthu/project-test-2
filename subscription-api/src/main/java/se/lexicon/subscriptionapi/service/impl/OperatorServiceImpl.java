@@ -25,6 +25,9 @@ public class OperatorServiceImpl implements OperatorService {
     @Override
     @Transactional
     public OperatorResponse create(OperatorRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("OperatorRequest cannot be null");
+        }
         if (operatorRepository.existsByName(request.name())) {
             throw new BusinessRuleException("Operator name already exists: " + request.name());
         }
